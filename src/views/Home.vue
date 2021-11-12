@@ -1,18 +1,28 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <section class="home">
+    <CharacterList :characterList="characterList" />
+  </section>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import { ref } from "vue";
+import charactersService from "../services/CharactersService.js";
+
+import CharacterList from "@/components/CharacterList";
 
 export default {
   name: "Home",
+  setup() {
+    let characterList = ref({});
+
+    charactersService.get().then(({ data }) => {
+      characterList.value = data.results;
+    });
+
+    return { characterList };
+  },
   components: {
-    HelloWorld,
+    CharacterList,
   },
 };
 </script>
